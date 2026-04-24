@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capgemini L1 Practice — Full Syllabus</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff; --bg2: #f5f5f4; --bg3: #efefed;
+    --text: #1a1a18; --text2: #5c5c58; --text3: #9a9a96;
+    --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.22);
+    --blue: #378ADD; --blue-bg: #E6F1FB; --blue-text: #0C447C;
+    --green: #3B6D11; --green-bg: #EAF3DE; --green-border: #97C459;
+    --red: #A32D2D; --red-bg: #FCEBEB; --red-border: #F09595;
+    --amber: #BA7517; --amber-bg: #FAEEDA;
+    --purple: #534AB7; --purple-bg: #EEEDFE;
+    --teal: #0F6E56; --teal-bg: #E1F5EE;
+    --coral: #993C1D; --coral-bg: #FAECE7;
+    --radius: 8px; --radius-lg: 12px;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono: 'SF Mono', 'Fira Code', monospace;
+  }
+  body { font-family: var(--font); background: var(--bg3); color: var(--text); min-height: 100vh; }
+
+  /* LAYOUT */
+  .app { max-width: 820px; margin: 0 auto; padding: 24px 16px 60px; }
+  .hidden { display: none !important; }
+
+  /* TOP NAV */
+  .topnav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+  .topnav h1 { font-size: 20px; font-weight: 600; color: var(--text); }
+  .topnav p { font-size: 13px; color: var(--text2); margin-top: 3px; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .badge-blue { background: var(--blue-bg); color: var(--blue-text); }
+
+  /* STATS ROW */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 24px; }
+  .stat-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 12px 14px; text-align: center; }
+  .stat-val { font-size: 26px; font-weight: 600; color: var(--text); line-height: 1; }
+  .stat-lbl { font-size: 11px; color: var(--text3); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-card.highlight .stat-val { color: var(--blue); }
+
+  /* MODULE GRID */
+  .section-label { font-size: 12px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
+  .module-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-bottom: 20px; }
+  .mod-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 14px; cursor: pointer; transition: all 0.15s; position: relative; }
+  .mod-card:hover { border-color: var(--border2); background: var(--bg2); transform: translateY(-1px); }
+  .mod-card .mod-icon { font-size: 20px; margin-bottom: 8px; }
+  .mod-card .mod-name { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.3; }
+  .mod-card .mod-count { font-size: 11px; color: var(--text3); margin-top: 3px; }
+  .mod-card .mod-progress { margin-top: 8px; height: 3px; background: var(--bg3); border-radius: 2px; overflow: hidden; }
+  .mod-card .mod-bar { height: 100%; border-radius: 2px; background: var(--blue); transition: width 0.3s; }
+  .mod-card .mod-score { font-size: 11px; color: var(--blue-text); margin-top: 4px; font-weight: 600; }
+  .mod-card .mod-done-badge { position: absolute; top: 10px; right: 10px; width: 18px; height: 18px; border-radius: 50%; background: var(--green-bg); display: flex; align-items: center; justify-content: center; font-size: 10px; }
+
+  /* ACTION BUTTONS */
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+  .btn { padding: 9px 20px; border: 0.5px solid var(--border2); border-radius: var(--radius); background: var(--bg); cursor: pointer; font-size: 13px; font-weight: 500; color: var(--text); transition: all 0.15s; font-family: var(--font); }
+  .btn:hover { background: var(--bg2); }
+  .btn:active { transform: scale(0.98); }
+  .btn-primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .btn-primary:hover { background: #185FA5; }
+  .btn-danger { background: var(--red-bg); color: var(--red); border-color: var(--red-border); }
+  .btn-sm { padding: 6px 14px; font-size: 12px; }
+  .btn-back { background: none; border: none; color: var(--blue); font-size: 13px; cursor: pointer; padding: 0; display: flex; align-items: center; gap: 5px; font-family: var(--font); margin-bottom: 16px; }
+  .btn-back:hover { text-decoration: underline; }
+
+  /* QUIZ AREA */
+  .quiz-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .quiz-module-tag { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px; }
+  .quiz-progress-text { font-size: 12px; color: var(--text3); }
+  .progress-bar-wrap { height: 4px; background: var(--bg3); border-radius: 2px; margin-bottom: 20px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: var(--blue); border-radius: 2px; transition: width 0.3s; }
+
+  /* QUESTION CARD */
+  .q-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 22px; margin-bottom: 14px; }
+  .q-num { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .q-text { font-size: 16px; font-weight: 500; color: var(--text); line-height: 1.65; margin-bottom: 14px; }
+  .q-code { background: #1e1e2e; color: #cdd6f4; font-family: var(--mono); font-size: 13px; border-radius: var(--radius); padding: 14px 16px; margin-bottom: 16px; white-space: pre; overflow-x: auto; line-height: 1.6; }
+
+  /* OPTIONS */
+  .opt { display: flex; align-items: flex-start; gap: 12px; padding: 11px 14px; border: 0.5px solid var(--border); border-radius: var(--radius); cursor: pointer; margin-bottom: 9px; transition: all 0.15s; }
+  .opt:hover:not(.disabled) { border-color: var(--border2); background: var(--bg2); }
+  .opt-key { width: 26px; height: 26px; min-width: 26px; border-radius: 50%; background: var(--bg2); border: 0.5px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--text2); }
+  .opt-text { font-size: 14px; color: var(--text); line-height: 1.5; padding-top: 2px; }
+  .opt.correct { border-color: var(--green); background: var(--green-bg); }
+  .opt.correct .opt-key { background: var(--green); color: #fff; border-color: var(--green); }
+  .opt.wrong { border-color: var(--red); background: var(--red-bg); }
+  .opt.wrong .opt-key { background: var(--red); color: #fff; border-color: var(--red); }
+  .opt.show-correct { border-color: var(--green); background: var(--green-bg); opacity: 0.7; }
+  .opt.show-correct .opt-key { background: var(--green); color: #fff; border-color: var(--green); }
+  .opt.disabled { cursor: default; }
+
+  /* FEEDBACK */
+  .feedback { border-radius: var(--radius); padding: 12px 16px; font-size: 13px; line-height: 1.7; margin-bottom: 14px; }
+  .feedback-correct { background: var(--green-bg); color: var(--green); border: 0.5px solid var(--green-border); }
+  .feedback-wrong { background: var(--red-bg); color: var(--red); border: 0.5px solid var(--red-border); }
+  .feedback strong { font-weight: 700; display: block; margin-bottom: 4px; font-size: 14px; }
+
+  /* RESULTS */
+  .results-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 28px; text-align: center; margin-bottom: 20px; }
+  .results-score { font-size: 56px; font-weight: 700; line-height: 1; }
+  .results-label { font-size: 15px; color: var(--text2); margin-top: 6px; margin-bottom: 20px; }
+  .results-breakdown { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
+  .res-stat { background: var(--bg2); border-radius: var(--radius); padding: 12px; }
+  .res-stat-val { font-size: 22px; font-weight: 700; }
+  .res-stat-lbl { font-size: 11px; color: var(--text3); margin-top: 3px; text-transform: uppercase; }
+
+  /* MODULE COLORS */
+  .tag-java8 { background: var(--blue-bg); color: var(--blue-text); }
+  .tag-java9 { background: var(--purple-bg); color: var(--purple); }
+  .tag-java21 { background: var(--teal-bg); color: var(--teal); }
+  .tag-oops { background: var(--amber-bg); color: var(--amber); }
+  .tag-collections { background: var(--coral-bg); color: var(--coral); }
+  .tag-threads { background: #f0e6fb; color: #6b21a8; }
+  .tag-exceptions { background: var(--red-bg); color: var(--red); }
+  .tag-spring { background: var(--green-bg); color: var(--green); }
+  .tag-springboot { background: #e0f7fa; color: #006064; }
+  .tag-security { background: #fce4ec; color: #880e4f; }
+  .tag-junit { background: #e8f5e9; color: #1b5e20; }
+  .tag-mockito { background: #fff3e0; color: #e65100; }
+  .tag-sbtest { background: #e3f2fd; color: #0d47a1; }
+  .tag-advanced8 { background: #fafafa; color: #333; border: 0.5px solid #ddd; }
+
+  /* MISC */
+  .divider { height: 0.5px; background: var(--border); margin: 20px 0; }
+  .tip { font-size: 12px; color: var(--text3); margin-top: 6px; }
+  @media (max-width: 500px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .module-grid { grid-template-columns: repeat(2, 1fr); }
+    .results-breakdown { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HOME -->
+  <div id="home">
+    <div class="topnav">
+      <div>
+        <h1>Capgemini L1 Practice</h1>
+        <p>Full syllabus · 6-phase Java + AWS · L1 on 27 April</p>
+      </div>
+      <span class="badge badge-blue" id="days-left"></span>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card highlight">
+        <div class="stat-val" id="s-total">0</div>
+        <div class="stat-lbl">Attempted</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="s-correct">0</div>
+        <div class="stat-lbl">Correct</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="s-pct">—</div>
+        <div class="stat-lbl">Accuracy</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="s-streak">0</div>
+        <div class="stat-lbl">Streak 🔥</div>
+      </div>
+    </div>
+
+    <div class="section-label">Choose a module</div>
+    <div class="module-grid" id="module-grid"></div>
+
+    <div class="divider"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="startMixed()">Practice all modules (mixed) ↗</button>
+      <button class="btn" onclick="startWeak()">Practice weak areas ↗</button>
+      <button class="btn btn-danger btn-sm" onclick="resetProgress()">Reset progress</button>
+    </div>
+    <p class="tip">Progress is saved automatically — safe to close and return.</p>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz" class="hidden">
+    <button class="btn-back" onclick="goHome()">← back to modules</button>
+    <div class="quiz-header">
+      <span class="quiz-module-tag" id="q-module-tag"></span>
+      <span class="quiz-progress-text" id="q-progress-text"></span>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="q-progress-bar"></div></div>
+    <div class="q-card">
+      <div class="q-num" id="q-num"></div>
+      <div class="q-text" id="q-text"></div>
+      <pre class="q-code hidden" id="q-code"></pre>
+      <div id="q-opts"></div>
+      <div id="q-feedback" class="feedback hidden"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" id="btn-skip" onclick="nextQ()">Skip</button>
+      <button class="btn btn-primary hidden" id="btn-next" onclick="nextQ()">Next question →</button>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results" class="hidden">
+    <button class="btn-back" onclick="goHome()">← back to modules</button>
+    <div class="results-card">
+      <div class="results-score" id="res-pct"></div>
+      <div class="results-label" id="res-label"></div>
+      <div class="results-breakdown">
+        <div class="res-stat"><div class="res-stat-val" id="res-correct"></div><div class="res-stat-lbl">Correct</div></div>
+        <div class="res-stat"><div class="res-stat-val" id="res-wrong"></div><div class="res-stat-lbl">Wrong</div></div>
+        <div class="res-stat"><div class="res-stat-val" id="res-skipped"></div><div class="res-stat-lbl">Skipped</div></div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="res-retry" onclick="retryModule()">Retry this module</button>
+      <button class="btn" onclick="goHome()">Back to home</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────────────────────
+const MODULES = [
+  { id:'java8', name:'Java 8 — Streams & Lambdas', icon:'⚡', tag:'tag-java8', label:'Java 8' },
+  { id:'java8adv', name:'Java 8 — Advanced MCQs', icon:'🔬', tag:'tag-advanced8', label:'Java 8 Adv' },
+  { id:'java9to17', name:'Java 9–17 Features', icon:'🚀', tag:'tag-java9', label:'Java 9–17' },
+  { id:'java21', name:'Java 21 Virtual Threads', icon:'🧵', tag:'tag-java21', label:'Java 21' },
+  { id:'oops', name:'Core OOPs Concepts', icon:'🏗️', tag:'tag-oops', label:'OOPs' },
+  { id:'collections', name:'Collections Framework', icon:'📦', tag:'tag-collections', label:'Collections' },
+  { id:'threads', name:'Multithreading & Concurrency', icon:'⚙️', tag:'tag-threads', label:'Threads' },
+  { id:'exceptions', name:'Exception Handling', icon:'⚠️', tag:'tag-exceptions', label:'Exceptions' },
+  { id:'spring', name:'Spring Core & AOP', icon:'🌱', tag:'tag-spring', label:'Spring' },
+  { id:'springboot', name:'Spring Boot & REST', icon:'🌐', tag:'tag-springboot', label:'Boot/REST' },
+  { id:'security', name:'Spring Security & Microservices', icon:'🔐', tag:'tag-security', label:'Security/MS' },
+  { id:'junit', name:'JUnit 5 Testing', icon:'🧪', tag:'tag-junit', label:'JUnit 5' },
+  { id:'mockito', name:'Mockito', icon:'🎭', tag:'tag-mockito', label:'Mockito' },
+  { id:'sbtest', name:'Spring Boot Testing', icon:'🔧', tag:'tag-sbtest', label:'SB Testing' },
+];
+
+const ALL_QUESTIONS = {
+java8: [
+  {q:"Which of the following is a terminal operation in the Stream API?",opts:["filter()","map()","reduce()","flatMap()"],a:2,exp:"Terminal operations produce a result or side-effect and close the stream. reduce(), collect(), count(), forEach() are terminal. filter(), map(), flatMap() are intermediate."},
+  {q:"Which functional interface is used for evaluating a boolean condition?",opts:["Consumer","Predicate","Supplier","Function"],a:1,exp:"Predicate<T> has test(T t) returning boolean. Consumer consumes (void), Supplier supplies (no input), Function maps T→R."},
+  {q:"What is the default access modifier for a default method in an interface?",opts:["private","protected","package-private","public"],a:3,exp:"Default methods in interfaces are implicitly public. They provide a default implementation that implementing classes can override."},
+  {q:"Which syntax represents a Method Reference in Java 8?",opts:["ClassName::methodName","ClassName->methodName","ClassName.methodName()","ClassName::new()"],a:0,exp:"Method references use :: operator. Types: static (Class::method), instance (obj::method), arbitrary instance (Class::method), constructor (Class::new)."},
+  {q:"What does Optional.orElseThrow() throw by default if the value is absent?",opts:["NullPointerException","IllegalStateException","NoSuchElementException","RuntimeException"],a:2,exp:"Optional.orElseThrow() throws NoSuchElementException if no value is present. You can also pass a Supplier to throw a custom exception."},
+  {q:"Which stream operation is used for debugging/viewing elements without modifying them?",opts:["filter()","peek()","map()","collect()"],a:1,exp:"peek() is an intermediate operation that performs an action on each element as it flows through, returning the same stream. Useful for debugging with print statements."},
+  {q:"Which method returns the first element of a Stream?",opts:["findFirst()","first()","head()","get(0)"],a:0,exp:"findFirst() returns an Optional<T> containing the first element. findAny() returns any element (useful in parallel streams)."},
+  {q:"What is the main difference between map and flatMap?",opts:["map is faster","map handles nulls","flatMap flattens nested structures into a single Stream","flatMap returns a List"],a:2,exp:"map(x -> Stream.of(x)) gives Stream<Stream<T>>. flatMap(x -> Stream.of(x)) flattens it to Stream<T>. Use flatMap when each element maps to multiple values."},
+  {q:"Is java.lang.Runnable considered a Functional Interface in Java 8?",opts:["Yes","No","Only if annotated with @FunctionalInterface","None of the above"],a:0,exp:"Yes! Runnable has exactly one abstract method: run(). Any interface with a single abstract method (SAM) is a functional interface, regardless of @FunctionalInterface annotation."},
+  {q:"Which method is defined in the Supplier<T> functional interface?",opts:["accept()","get()","test()","apply()"],a:1,exp:"Supplier<T>: get() — no input, returns T. Consumer<T>: accept(T) — input, no return. Predicate<T>: test(T) — returns boolean. Function<T,R>: apply(T) — maps T to R."},
+  {q:"Which method is defined in the Consumer<T> functional interface?",opts:["get()","apply()","accept()","consume()"],a:2,exp:"Consumer<T> accepts a single argument and returns void. accept(T t) is the abstract method. andThen() is a default method for chaining consumers."},
+  {q:"Calling boxed() on an IntStream results in which type?",opts:["Stream<int>","Stream<Integer>","Stream<Object>","List<Integer>"],a:1,exp:"boxed() converts a primitive stream (IntStream, LongStream, DoubleStream) to its boxed object Stream<Integer>, Stream<Long>, Stream<Double> respectively."},
+  {q:"Collectors.joining() can be used to concatenate streams of what type?",opts:["CharSequence / String","Integer","Boolean","Object"],a:0,exp:"Collectors.joining() works on Stream<String> or Stream<CharSequence>. You can specify delimiter, prefix, suffix: Collectors.joining(\", \", \"[\", \"]\")"},
+  {q:"Which interface takes two arguments and returns a boolean?",opts:["BiConsumer","BiFunction","BinaryOperator","BiPredicate"],a:3,exp:"BiPredicate<T,U>: test(T t, U u) → boolean. BiConsumer: (T,U) → void. BiFunction: (T,U) → R. BinaryOperator<T>: (T,T) → T."},
+  {q:"What does the limit(n) method do on a stream?",opts:["Throws exception if size > n","Truncates the stream to the first n elements","Skips the first n elements","Limits the maximum value of elements"],a:1,exp:"limit(n) is a short-circuiting intermediate operation that returns a stream of at most n elements. skip(n) is the complement — it discards the first n elements."},
+  {q:"Can a Java Stream be reused after a terminal operation is invoked?",opts:["Yes","No, it throws an IllegalStateException","Yes, if reset","Only parallel streams"],a:1,exp:"Streams are single-use. Once a terminal operation is called, the stream is consumed. Calling any operation again throws IllegalStateException: stream has already been operated upon or closed."},
+  {q:"What mechanism does parallelStream() use internally by default?",opts:["Thread class","ExecutorService pool","ForkJoinPool.commonPool()","Virtual Threads"],a:2,exp:"parallelStream() uses ForkJoinPool.commonPool() which by default has (CPU cores - 1) threads. You can provide a custom ForkJoinPool using submit()."},
+  {q:"What is the return type of the anyMatch() stream operation?",opts:["boolean","Optional<Boolean>","Boolean","Predicate"],a:0,exp:"anyMatch(Predicate) returns primitive boolean. It short-circuits — stops at first match. allMatch() and noneMatch() are similar short-circuit terminal operations."},
+  {q:"What feature allows adding new methods to interfaces without breaking implementing classes?",opts:["Static methods","Abstract methods","Functional interfaces","Default methods"],a:3,exp:"Default methods (Java 8) have an implementation in the interface. Implementing classes inherit it automatically, so existing code doesn't break. Classes can override if needed."},
+  {q:"What is a Spliterator used for?",opts:["Traversing and partitioning elements for parallel execution","Splitting strings","Reversing iterators","Replacing Enumeration"],a:0,exp:"Spliterator (Splittable Iterator) is used internally by parallel streams. It can split the source for parallel processing and traverse elements sequentially or in parallel."},
+],
+java8adv: [
+  {q:"Which Java 8 feature allows us to filter a collection based on a predicate?",opts:["Lambda Expression","Default Method","Optional class","Stream API"],a:3,exp:"Stream API's filter() method takes a Predicate and returns a new stream with only the matching elements. e.g., list.stream().filter(x -> x > 5)"},
+  {q:"What is the output?\nList<String> names = Arrays.asList(\"ABC\",\"CAB\",\"BCA\");\nString result = names.stream().reduce(\"\", (a, b) -> a + b.charAt(1));\nSystem.out.println(result);",opts:["ABC","ACB","BAC","CBA"],a:2,code:'List<String> names = Arrays.asList("ABC","CAB","BCA");\nString result = names.stream().reduce("", (a, b) -> a + b.charAt(1));\nSystem.out.println(result);',exp:"reduce starts with \"\". charAt(1) of ABC=B, CAB=A, BCA=C. Accumulates: \"\" + B = \"B\", \"B\" + A = \"BA\", \"BA\" + C = \"BAC\". Output: BAC"},
+  {q:"Which is the new method introduced in the String class in Java 8?",opts:["offsetByCodePoints()","matches()","intern()","join()"],a:3,exp:"String.join() was added in Java 8. e.g., String.join(\"-\", \"a\",\"b\",\"c\") → \"a-b-c\". It also accepts an Iterable."},
+  {q:"Which functional interface returns a value without taking any input?",opts:["Consumer","Predicate","Supplier","Function"],a:2,exp:"Supplier<T>: get() takes no argument and returns T. Perfect for lazy evaluation and factory patterns."},
+  {q:"Which one is the correct syntax for a lambda expression in Java 8?",opts:["(param1, param2) => expression","(param1, param2) :: { expression }","(param1, param2) -> expression","(param1, param2) : expression"],a:2,exp:"Java lambda syntax uses ->. Single expression: (x,y) -> x+y. Block: (x,y) -> { return x+y; }. No params: () -> 42. Single param: x -> x*2."},
+  {q:"What is the purpose of flatMap() when each stream element maps to multiple values?",opts:["Returns a Stream<Stream<T>>","Flattens nested streams into a single Stream<T>","Filters null values","Sorts the stream"],a:1,exp:"flatMap maps each element to a stream and then flattens all those streams into one. flatMap(Collection::stream) is a common pattern to flatten a list of lists."},
+  {q:"Which of the following is NOT a valid target type for a lambda expression?",opts:["An interface with a single abstract method","A functional interface","A class with a single abstract method","All of the above are valid"],a:2,exp:"Lambdas can only target functional interfaces (interfaces with exactly one abstract method). Classes — abstract or not — cannot be a lambda target."},
+  {q:"What is the purpose of the Supplier interface?",opts:["Takes no args and returns no value","Takes one arg and returns a value","Takes no args and returns a value","Takes one arg and returns no value"],a:2,exp:"Supplier<T>: () -> T. Used for lazy initialization, factory methods, and deferred computation. e.g., Optional.orElseGet(() -> computeDefault())"},
+  {q:"What does IntStream.range(1, 6) produce?",opts:["1 2 3 4 5 6","2 3 4 5","1 2 3 4 5","1 2 3 4"],code:"IntStream.range(1, 6)\n  .mapToObj(i -> i + \" \")\n  .forEach(System.out::print);",a:2,exp:"range(start, end) is exclusive of end. So range(1,6) produces 1,2,3,4,5. rangeClosed(1,6) would include 6."},
+  {q:"What is the output of this stream code?",code:'List<Integer> list = Arrays.asList(1, 15, 3, 10, 27);\nint sum = list.stream()\n  .filter(i -> i % 3 == 0)\n  .mapToInt(Integer::intValue)\n  .sum();\nSystem.out.println(sum);',opts:["18","45","30","56"],a:1,exp:"Elements divisible by 3: 15 (15%3=0), 3 (3%3=0), 27 (27%3=0). Sum = 15+3+27 = 45."},
+  {q:"What is the output?",code:'Stream<String> stream = Stream.of("hello", "world", "java");\nstream.filter(s -> s.contains("o"))\n  .map(String::toUpperCase)\n  .forEach(System.out::print);',opts:["HELLO WORLD JAVA","hello world java","HELLOWORLD","HELLO WORLD"],a:2,exp:"Filter keeps 'hello' and 'world' (both contain 'o'). map uppercases to 'HELLO', 'WORLD'. forEach prints with no separator → HELLOWORLD."},
+  {q:"What does reduce() do in Java 8 streams?",opts:["Transforms each element","Converts nested stream to single stream","Produces a single result from a sequence","Filters elements"],a:2,exp:"reduce() is a terminal operation that combines stream elements into a single result using an associative function. e.g., reduce(0, Integer::sum) sums all elements."},
+  {q:"What is the output of this reduce code?",code:"Stream<Integer> stream = Stream.of(1, 2, 3, 4, 5);\nstream.reduce((a, b) -> a + b)\n  .ifPresent(System.out::println);",opts:["15","10","6","5"],a:0,exp:"reduce without identity returns Optional. Sums: 1+2=3, 3+3=6, 6+4=10, 10+5=15. ifPresent prints 15."},
+  {q:"Which condition is mandatory to define a functional interface?",opts:["Must have @FunctionalInterface annotation","Must have only one method","Must have exactly one abstract method","Must have at least one method"],a:2,exp:"A functional interface must have exactly one abstract method (SAM). It can have default methods, static methods, and methods inherited from Object. @FunctionalInterface is optional but recommended."},
+  {q:"What is the purpose of parallelStream()?",opts:["Filter elements","Apply operation to each element","Create a parallel stream from a sequential stream","Create sequential stream from parallel"],a:2,exp:"parallelStream() enables parallel processing using ForkJoinPool. Works well for large, CPU-intensive, order-independent operations. Not always faster due to overhead."},
+  {q:"What does the peek() method in Java 8 Streams do?",opts:["Applies operation to each element without modifying stream","Filters elements","Converts to array","Transforms each element"],a:0,exp:"peek() is an intermediate operation for side-effects (like logging). It performs an action on each element as it passes through but returns the same stream: stream.peek(e -> log(e)).filter(...)"},
+  {q:"What is the output of this sorted stream?",code:'List<String> list = Arrays.asList("banana", "apple", "cherry");\nlist.stream()\n  .sorted((s1, s2) -> s1.compareTo(s2))\n  .forEach(System.out::println);',opts:["apple, banana, cherry","cherry, banana, apple","banana, apple, cherry","apple, cherry, banana"],a:0,exp:"compareTo gives natural alphabetical ordering. a < b < c alphabetically → apple, banana, cherry."},
+  {q:"What is the findFirst() result when no element passes the filter?",code:'String result = words.stream()\n  .filter(w -> w.length() > 10)\n  .findFirst()\n  .orElse("none");\n// words: ["Paris","London","New York","Sydney","Washington"]',opts:["none","Washington","New York","Exception thrown"],a:0,exp:"No word exceeds 10 characters (Washington=10, not > 10). findFirst() returns empty Optional. orElse(\"none\") returns \"none\"."},
+  {q:"Which terminal operation collects stream elements into a List/Set/Map?",opts:["toCollection()","toArray()","toList()","collect()"],a:3,exp:"collect() with Collectors.toList(), Collectors.toSet(), or Collectors.toMap() gathers stream elements. In Java 16+, stream.toList() is also available as a shorthand."},
+  {q:"What does the Optional class represent?",opts:["A value that can either be present or absent","An immutable collection","Optional values in streams","An alternative to functional interfaces"],a:0,exp:"Optional<T> is a container that may or may not hold a value, avoiding null. Key methods: isPresent(), get(), orElse(), orElseGet(), orElseThrow(), map(), filter()."},
+],
+java9to17: [
+  {q:"The var keyword for local variable type inference was introduced in which version?",opts:["Java 8","Java 9","Java 10","Java 11"],a:2,exp:"var was introduced in Java 10 for local variable type inference. The compiler infers the type from the right-hand side. Cannot be used for fields, params, or return types."},
+  {q:"Which feature restricts which other classes may extend or implement a class/interface?",opts:["Final classes","Sealed classes","Private classes","Abstract modules"],a:1,exp:"Sealed classes (Java 17) use 'permits' to list allowed subclasses. e.g., sealed class Shape permits Circle, Rectangle. Subclasses must be final, sealed, or non-sealed."},
+  {q:"Records were officially standardized as a feature in?",opts:["Java 11","Java 14","Java 15","Java 16"],a:3,exp:"Records became standard in Java 16. They are immutable data classes: record Point(int x, int y) {} auto-generates constructor, getters, equals(), hashCode(), toString()."},
+  {q:"Text Blocks in Java use which delimiters for defining multi-line strings?",opts:['\"\"\" \"\"\"',"''' '''","` `",'\" \" \"'],a:0,exp:'Text Blocks (Java 15) use triple double-quotes: String json = """\n{\n  "name": "Rahul"\n}"""; They preserve formatting and reduce escape characters.'},
+  {q:"In Java 14+ switch expressions, which operator is used for arrow case labels?",opts:[":","::","->"," =>"],a:2,exp:"Arrow case labels (->)  don't fall through and yield a value directly. e.g., int result = switch(day) { case MONDAY -> 1; case TUESDAY -> 2; default -> 0; };"},
+  {q:"JShell, introduced in Java 9, is known as a?",opts:["REPL tool","Build tool","Garbage Collector","UI framework"],a:0,exp:"JShell is a REPL (Read-Eval-Print Loop) tool that lets you execute Java code snippets interactively without writing a full class. Great for quick experimentation."},
+  {q:"module-info.java is used for configuring?",opts:["Maven","The Java Platform Module System (JPMS)","Gradle","Classpaths"],a:1,exp:"JPMS (Project Jigsaw, Java 9) introduced modules. module-info.java declares module name, requires (dependencies), exports (packages to expose)."},
+  {q:"Which factory method creates an immutable list in Java 9+?",opts:["Arrays.asList()","Collections.unmodifiableList()","new ArrayList<>()","List.of()"],a:3,exp:"List.of() creates an immutable list (throws UnsupportedOperationException on modification). Arrays.asList() allows set() but not add/remove. Collections.unmodifiableList() wraps a mutable list."},
+  {q:"Java Records are implicitly?",opts:["final","abstract","mutable","static"],a:0,exp:"Records are implicitly final — they cannot be extended. Their components are also final (immutable). They can implement interfaces but not extend classes (except Record)."},
+  {q:"Can a Record define custom instance methods?",opts:["No","Yes","Only static methods","Only private methods"],a:1,exp:"Records can define custom instance methods, static methods, and static fields. They cannot have instance fields beyond the record components. They auto-generate canonical constructor."},
+  {q:"Helpful NullPointerExceptions that pinpoint exactly which variable was null were added in?",opts:["Java 8","Java 11","Java 14","Java 17"],a:2,exp:"Java 14 introduced helpful NPEs that say exactly which variable was null. e.g., \"Cannot read field 'name' because 'user' is null\" instead of just \"NullPointerException\"."},
+  {q:"Can var be used to define instance fields in a class?",opts:["Yes","No","Only if final","Only in records"],a:1,exp:"var is only for local variables inside methods. You cannot use it for instance fields, method parameters, return types, or catch parameters."},
+  {q:"Pattern matching for instanceof (Java 16) simplifies code by?",opts:["Automatically casting the variable if the check passes","Returning a boolean","Catching exceptions","Ignoring nulls"],a:0,exp:'Before: if (obj instanceof String) { String s = (String) obj; ... }\nAfter (Java 16): if (obj instanceof String s) { ... } — s is already cast and bound.'},
+  {q:"Which keyword is used in a Sealed Class to declare which classes are allowed to extend it?",opts:["allows","provides","strictly","permits"],a:3,exp:"sealed class Shape permits Circle, Square, Triangle {} — only these three classes can extend Shape. Each permitted class must be in the same package or module."},
+  {q:"The yield keyword in a switch expression is used to?",opts:["Return a value from a switch block case","Pause a thread","Throw an exception","Break the loop"],a:0,exp:"yield returns a value from a switch block case (multi-line case). Arrow cases (->) don't need yield. e.g., case 1: { int x = compute(); yield x; }"},
+  {q:"Private methods in interfaces were introduced in?",opts:["Java 7","Java 8","Java 9","Java 11"],a:2,exp:"Java 9 added private methods in interfaces to allow code sharing between default methods without exposing the helper method to implementing classes."},
+  {q:"The standardized java.net.http.HttpClient API supporting HTTP/2 became standard in?",opts:["Java 8","Java 11","Java 14","Java 17"],a:1,exp:"HttpClient became standard in Java 11. It supports HTTP/1.1 and HTTP/2, WebSocket, synchronous and asynchronous requests. Replaces the old HttpURLConnection."},
+  {q:"Which Garbage Collector became the default setting in Java 9?",opts:["G1 GC","Parallel GC","CMS GC","Serial GC"],a:0,exp:"G1 GC (Garbage First) became the default in Java 9, replacing Parallel GC. G1 is designed for large heaps with predictable pause times."},
+  {q:"The Z Garbage Collector (ZGC) was introduced primarily for?",opts:["Limited memory devices","Single-threaded processing","Maximum throughput","Ultra-low latency"],a:3,exp:"ZGC is designed for ultra-low latency — pause times under 10ms regardless of heap size. It handles multi-terabyte heaps. Became production-ready in Java 15."},
+  {q:"What are Hidden Classes (Java 15)?",opts:["Classes without a name","Classes with private access modifiers","Classes un-discoverable via bytecode/reflection, useful for frameworks","Obfuscated classes"],a:2,exp:"Hidden Classes are dynamically generated classes that cannot be used directly by the bytecode of other classes and are not discoverable via reflection. Used by frameworks like Lambda implementation."},
+],
+java21: [
+  {q:"What is the primary purpose of Virtual Threads (Java 21)?",opts:["High computation tasks","High-throughput concurrent applications","UI rendering","GPU processing"],a:1,exp:"Virtual Threads are lightweight threads managed by the JVM, not the OS. They enable millions of concurrent tasks with minimal overhead, ideal for I/O-bound server applications."},
+  {q:"Which method correctly instantiates a Virtual Thread?",opts:["new VirtualThread()","Thread.createVirtual()","Executors.newVirtualThread()","Thread.ofVirtual().start()"],a:3,exp:"Thread.ofVirtual().start(runnable) creates and starts a virtual thread. Also: Thread.ofVirtual().name(\"my-vt\").start(task) or Executors.newVirtualThreadPerTaskExecutor()."},
+  {q:"Virtual Threads are managed by the?",opts:["JVM","Operating System","Hardware","ThreadPoolExecutor"],a:0,exp:"Virtual Threads are managed by the JVM. The JVM maps many virtual threads to a small number of OS (platform/carrier) threads using a ForkJoinPool scheduler."},
+  {q:"Which interfaces are introduced in the Sequenced Collections framework (Java 21)?",opts:["OrderedList, OrderedSet","SortedCollection, SortedMap","SequencedCollection, SequencedSet, SequencedMap","LinearCollection"],a:2,exp:"Java 21 adds SequencedCollection (has getFirst/getLast/addFirst/addLast), SequencedSet, and SequencedMap to provide uniform API for ordered collections."},
+  {q:"Which method gets the first element in a SequencedCollection?",opts:["peek()","getFirst()","head()","top()"],a:1,exp:"SequencedCollection adds getFirst() and getLast() methods, providing a consistent API across List, Deque, and LinkedHashSet."},
+  {q:"Pattern Matching for switch allows you to?",opts:["Switch on object types and extract components","Switch on Regex patterns","Switch without case statements","Switch on multiple variables"],a:0,exp:"switch (obj) { case String s -> ...; case Integer i when i > 0 -> ...; case null -> ...; default -> ...; } — enables type-safe switching with guards."},
+  {q:"What defines the scope of a Scoped Value (Preview)?",opts:["The entire JVM","A single method","A thread and its child threads","A single class instance"],a:2,exp:"Scoped Values provide immutable, inheritable thread-local-like values with a defined scope. Unlike ThreadLocal, they don't leak and are inherited by child (virtual) threads automatically."},
+  {q:"Record Patterns allow you to do what in an instanceof or switch?",opts:["Mutate record fields","Destructure the record into variables instantly","Create new records","Serialize records"],a:1,exp:"if (obj instanceof Point(int x, int y)) { ... } — Record Patterns extract record components inline. Works in switch too: case Point(int x, int y) -> x+y."},
+  {q:"Platform threads differ from Virtual Threads because Platform threads are mapped to?",opts:["OS threads 1:1","Multiple OS Threads","The JVM Heap","A ForkJoinPool"],a:0,exp:"Platform threads have 1:1 mapping to OS threads (~1MB stack each). Virtual threads are multiplexed by JVM onto carrier platform threads (~few KB overhead each)."},
+  {q:"The Structured Concurrency API aims to?",opts:["Treat multiple concurrent tasks from different threads as a single unit of work","Replace loops","Build UI layouts","Optimize database queries"],a:0,exp:"Structured Concurrency ensures tasks spawned in a scope are completed before the scope exits. If any task fails, others are cancelled — prevents thread leak and simplifies error handling."},
+  {q:"Virtual threads share which underlying pool for execution?",opts:["ForkJoinPool","CachedThreadPool","WorkStealingPool","SingleThreadPool"],a:0,exp:"Virtual threads are scheduled on ForkJoinPool.commonPool() by default. The JVM unmounts a virtual thread when it blocks on I/O and remounts it on a carrier thread when ready."},
+  {q:"Can executing a synchronized block pin a Virtual Thread to its carrier thread?",opts:["No, it's non-blocking","Yes, and it throws an exception","Yes, it pins the carrier thread","Only on Linux"],a:2,exp:"synchronized blocks/methods pin the virtual thread to its carrier platform thread during the block. Use ReentrantLock instead to avoid pinning with virtual threads."},
+  {q:"Which locking mechanism is preferred with Virtual Threads to avoid pinning?",opts:["synchronized blocks","ReentrantLock","volatile","AtomicInteger"],a:1,exp:"ReentrantLock doesn't pin virtual threads. When a virtual thread blocks on lock.lock(), the JVM unmounts it, freeing the carrier thread for other work."},
+  {q:"The memory overhead of a Virtual Thread object is approximately?",opts:["1 MB","2-4 MB","A few hundred bytes","Zero"],a:2,exp:"Virtual threads have very small stack (starts at a few hundred bytes, grows as needed). Platform threads have ~1MB fixed stack. This is why you can have millions of virtual threads."},
+  {q:"In Java 17+ switch expressions returning a value must be?",opts:["Exhaustive (cover all possible cases)","Final","Enclosed in brackets","Handled with try-catch"],a:0,exp:"Switch expressions must be exhaustive — the compiler verifies all possible values are handled (either explicit cases or a default). This prevents missed cases at runtime."},
+],
+oops: [
+  {q:"What part of a class defines its behavior?",opts:["Fields","Methods","Constructors","Variables"],a:1,exp:"Methods define the behavior of a class — what it can do. Fields/variables hold state. Constructors initialize objects. The combination of state + behavior = object."},
+  {q:"Hiding the internal state and requiring all interaction through methods is called?",opts:["Encapsulation","Polymorphism","Inheritance","Abstraction"],a:0,exp:"Encapsulation bundles data (fields) and methods, restricting direct access with private/protected. Access is through getters/setters. It protects internal state from unintended modification."},
+  {q:"Multiple inheritance of state (extending multiple classes) in Java is?",opts:["Allowed using special syntax","Allowed in Java 8+","Allowed only for abstract classes","Not supported"],a:3,exp:"Java doesn't support extending multiple classes (diamond problem). However, a class can implement multiple interfaces. Java 8 default methods partially allow multiple inheritance of behavior."},
+  {q:"Polymorphism achieved via method overloading is known as?",opts:["Runtime polymorphism","Dynamic binding","Compile-time polymorphism","Interface polymorphism"],a:2,exp:"Overloading = same method name, different parameters = resolved at compile time = Compile-time/Static polymorphism. Overriding = subclass redefines method = resolved at runtime = Runtime polymorphism."},
+  {q:"The super() keyword is used to?",opts:["Call the constructor of the parent class","Return to the previous method","Refer to static methods","Create a generic object"],a:0,exp:"super() calls the parent class constructor. Must be the first statement in the child constructor. super.method() calls the parent's method. super.field accesses the parent's field."},
+  {q:"Can an abstract class be directly instantiated using the new keyword?",opts:["Yes","No","Only if it has a constructor","Only inside the same package"],a:1,exp:"Abstract classes cannot be instantiated directly. They must be subclassed, and the subclass must implement all abstract methods (or also be abstract). new AbstractClass() = compile error."},
+  {q:"Prior to Java 8, could interfaces have method implementations?",opts:["Yes","Only static methods","No","Only protected methods"],a:2,exp:"Before Java 8, interfaces could only have public abstract methods and public static final fields. Java 8 added default and static methods. Java 9 added private methods."},
+  {q:"Which keyword stops a class from being inherited?",opts:["static","private","abstract","final"],a:3,exp:"final class cannot be extended. final method cannot be overridden. final variable cannot be reassigned. String, Integer, and all wrapper classes are final."},
+  {q:"Method overriding occurs when?",opts:["A subclass provides a specific implementation of a parent's method","Methods have same names but different params","Two classes share the same method name","A method deletes parent state"],a:0,exp:"Overriding: same method signature (name + params), subclass provides different implementation. Requires inheritance. @Override annotation is recommended to catch errors. Access modifier can be widened, not narrowed."},
+  {q:"The this keyword refers to?",opts:["The parent class","The current object instance","The static context","The main thread"],a:1,exp:"this refers to the current object instance. Used to differentiate between instance variables and parameters (this.name = name), chain constructors (this()), and pass current object as argument."},
+  {q:"Can static methods be overridden?",opts:["Yes","Yes, but only in final classes","No, they are hidden, not overridden","Only abstract static methods"],a:2,exp:"Static methods belong to the class, not instances. They can be redefined in subclasses (method hiding), but not overridden. No runtime polymorphism — it's resolved at compile time based on reference type."},
+  {q:"'Has-A' relationship is an alternative to inheritance known as?",opts:["Composition/Aggregation","Polymorphism","Instantiation","Implementation"],a:0,exp:"Composition (Has-A): class Car has an Engine. Inheritance (Is-A): class Car extends Vehicle. Composition is often preferred — 'favor composition over inheritance' for better flexibility."},
+  {q:"If no access modifier is specified for a class field, its scope is?",opts:["public","private","protected","package-private (default)"],a:3,exp:"Default (no modifier) = package-private: accessible within the same package but not from outside. More restrictive than protected (accessible in subclasses too)."},
+  {q:"Can an abstract class have zero abstract methods?",opts:["Yes","No","It results in a compile error","JVM removes the abstract keyword automatically"],a:0,exp:"Yes! An abstract class can have zero abstract methods. You might do this to prevent instantiation while providing common functionality to subclasses."},
+  {q:"What is Upcasting?",opts:["Casting a superclass to a subclass","Casting a subclass to a superclass","Casting an int to double","Converting string to object"],a:1,exp:"Upcasting = casting subclass reference to superclass type (always safe, implicit). Dog dog = new Dog(); Animal a = dog; // upcast. Downcasting = casting superclass to subclass (requires explicit cast, can throw ClassCastException)."},
+  {q:"What distinguishes an Abstract Class from an Interface in modern Java (Java 8+)?",opts:["Abstract classes have methods","Interfaces cannot have generic types","Abstract classes can have instance state (fields)","Interfaces cannot be extended"],a:2,exp:"Key difference: Abstract classes can have instance fields (state), constructors, and any access modifiers. Interfaces can only have static final fields. Abstract classes are used for 'IS-A' + shared state scenarios."},
+  {q:"Cohesion in OO design refers to?",opts:["How closely related responsibilities of a single class are","How classes depend on each other","The memory footprint of objects","Class performance"],a:0,exp:"High cohesion = a class has focused, related responsibilities (good). Low cohesion = class does unrelated things (bad). Related: Low coupling = classes are loosely dependent on each other (good)."},
+],
+collections: [
+  {q:"Which Collection fundamentally allows duplicate elements?",opts:["Set","List","Map","Dictionary"],a:1,exp:"List allows duplicates and maintains insertion order. Set doesn't allow duplicates. Map stores key-value pairs (keys unique, values can duplicate). Dictionary is a legacy class."},
+  {q:"What does a HashSet use internally to store its elements?",opts:["HashMap","Array","LinkedList","TreeMap"],a:0,exp:"HashSet is backed by a HashMap. When you add an element to HashSet, it's stored as a key in an internal HashMap with a dummy value (PRESENT constant)."},
+  {q:"Which Map implementation maintains insertion order of keys?",opts:["HashMap","TreeMap","LinkedHashMap","ConcurrentHashMap"],a:2,exp:"LinkedHashMap maintains insertion order using a doubly-linked list alongside the hash table. TreeMap maintains sorted order. HashMap has no order guarantee."},
+  {q:"A PriorityQueue orders its elements according to?",opts:["FIFO","LIFO","Random","Natural ordering or a provided Comparator"],a:3,exp:"PriorityQueue is a min-heap by default (smallest element polled first). Pass Comparator.reverseOrder() for max-heap. Does NOT maintain insertion order."},
+  {q:"Which is a legacy synchronized collection?",opts:["Vector","ArrayList","LinkedList","HashSet"],a:0,exp:"Vector is a legacy synchronized List (pre-Java 2). Hashtable is a legacy synchronized Map. Use Collections.synchronizedList(new ArrayList<>()) or CopyOnWriteArrayList instead."},
+  {q:"What is the average time complexity for get() in a HashMap?",opts:["O(n)","O(1)","O(log n)","O(n^2)"],a:1,exp:"HashMap get() is O(1) average. It computes hashCode(), finds the bucket, then compares keys. Worst case is O(n) with collisions, O(log n) with Java 8's tree-ification of long chains."},
+  {q:"What is the default initial capacity of an ArrayList?",opts:["0","5","10","16"],a:2,exp:"ArrayList default capacity is 10. When full, it grows by 50% (newCapacity = oldCapacity + oldCapacity/2). So 10 → 15 → 22 → 33..."},
+  {q:"When an ArrayList runs out of capacity, by what factor does it grow?",opts:["10%","25%","100%","50%"],a:3,exp:"ArrayList grows by 50% when capacity is exceeded: newCapacity = (oldCapacity * 3) / 2 + 1 ≈ 1.5x. This amortizes the O(n) copy cost."},
+  {q:"TreeMap implements which interface to guarantee sorted maps?",opts:["NavigableMap (SortedMap)","ConcurrentMap","OrderedMap","HashBasedMap"],a:0,exp:"TreeMap implements NavigableMap which extends SortedMap. Keys are sorted by natural order or provided Comparator. Operations are O(log n) using a Red-Black tree."},
+  {q:"Which class provides thread-safe concurrent access without locking the whole map?",opts:["Collections.synchronizedMap()","ConcurrentHashMap","Hashtable","ConcurrentTreeMap"],a:1,exp:"ConcurrentHashMap uses segment-level/bucket-level locking (not whole-map), allowing concurrent reads and 16+ concurrent writes. Much better performance than synchronizedMap in concurrent scenarios."},
+  {q:"CopyOnWriteArrayList is best suited for?",opts:["Read-heavy concurrent tasks","Write-heavy tasks","Single-threaded tasks","Sorting algorithms"],a:0,exp:"CopyOnWriteArrayList creates a new copy of the array on every write. Reads are lock-free. Best when reads vastly outnumber writes (e.g., event listener lists)."},
+  {q:"The poll() method of a Queue?",opts:["Returns and removes head, returning null if empty","Returns head without removing","Adds an element","Throws exception if empty"],a:0,exp:"Queue method pairs: poll() vs remove() (both remove head; poll() returns null if empty, remove() throws exception). peek() vs element() (both view head; peek() returns null if empty, element() throws)."},
+  {q:"What is a key difference between Arrays and ArrayLists?",opts:["Arrays are slower","Arrays are fixed size, ArrayLists are dynamic","Arrays only store primitives","ArrayList is a primitive type"],a:1,exp:"Arrays are fixed size (set at creation). ArrayList dynamically resizes. Arrays can store primitives; ArrayList stores objects (autoboxing for primitives). Arrays: O(1) random access. Both have O(1) get by index."},
+  {q:"What happens in a HashMap collision (pre-Java 8)?",opts:["Data is overwritten","Map resizes immediately","Exception thrown","Elements are stored in a linked list in the bucket"],a:3,exp:"Pre-Java 8: Collisions stored in LinkedList per bucket (O(n) worst case). Java 8+: When a bucket has 8+ entries, it converts to a TreeNode (Red-Black tree), giving O(log n) worst case."},
+  {q:"Collections.sort() uses which sorting algorithm under the hood?",opts:["Bubble Sort","QuickSort","Timsort (Merge + Insertion)","HeapSort"],a:2,exp:"Collections.sort() uses TimSort — a hybrid of MergeSort and Insertion Sort. Stable, O(n log n) worst case. Arrays.sort() uses dual-pivot QuickSort for primitives, TimSort for objects."},
+  {q:"How does IdentityHashMap compare its keys?",opts:["Reference equality (==)","The equals() method","The hashCode() method","Memory size"],a:0,exp:"IdentityHashMap uses == (reference equality) instead of equals() for key comparison. Useful when you need object identity, not logical equality. Two equal strings at different memory locations are different keys."},
+  {q:"What does the term 'Deque' stand for?",opts:["Delayed Queue","Derived Queue","Double Ended Queue","Dual Entry Queue"],a:2,exp:"Deque (Double Ended Queue) supports insertion and removal from both ends. ArrayDeque is the preferred implementation over Stack (legacy) for LIFO and is also faster than LinkedList as a queue."},
+  {q:"Using Iterator.remove() is safe while iterating a collection?",opts:["No, throws exception","Only in lists","Only in maps","Yes"],a:3,exp:"Iterator.remove() is the safe way to remove elements during iteration. Modifying a collection directly while iterating causes ConcurrentModificationException (fail-fast iterators)."},
+],
+threads: [
+  {q:"What state does a thread enter immediately after calling start()?",opts:["Running","Runnable","Waiting","Blocked"],a:1,exp:"After start(), the thread goes to Runnable state — it's ready to run but may not be executing yet (scheduler decides). States: New → Runnable → Running → Blocked/Waiting/Timed-Waiting → Terminated."},
+  {q:"Object.wait() must always be called from within?",opts:["A synchronized context","A static block","The main method","A loop"],a:0,exp:"wait(), notify(), and notifyAll() must be called while holding the object's monitor (inside synchronized block/method). Otherwise: IllegalMonitorStateException."},
+  {q:"The volatile keyword marks a variable to?",opts:["Never be cached thread-locally","Become synchronized","Be final","Be stored in PermGen"],a:0,exp:"volatile guarantees visibility — reads/writes go directly to main memory, not thread-local cache. Does NOT guarantee atomicity (i++ on volatile is still not thread-safe)."},
+  {q:"ExecutorService acts as a replacement for?",opts:["Managing and creating threads manually via new Thread()","Synchronization blocks","Fork/Join pool","System.exit()"],a:0,exp:"ExecutorService manages a pool of threads, eliminating manual thread creation. submit(), execute(), shutdown() are key methods. Prefer over new Thread() for better resource management."},
+  {q:"The main difference between CyclicBarrier and CountDownLatch?",opts:["CyclicBarrier is faster","CyclicBarrier only supports two threads","CountDownLatch can be reset","CyclicBarrier can be reset and reused"],a:3,exp:"CountDownLatch: one-time, threads wait for count to reach 0. CyclicBarrier: reusable, all threads wait at a barrier point then proceed together. CyclicBarrier can be reset() for reuse."},
+  {q:"What is a daemon thread?",opts:["A thread with max priority","A thread executing UI","A background thread that doesn't prevent JVM exit","A thread used by Spring only"],a:2,exp:"Daemon threads are background threads (e.g., GC). JVM exits when only daemon threads remain. Set: thread.setDaemon(true) before start(). User threads prevent JVM exit."},
+  {q:"ThreadLocal variables are?",opts:["Isolated per thread instance","Shared among all threads","Only readable, not writable","Used to hold global state"],a:0,exp:"ThreadLocal provides thread-isolated variables. Each thread has its own independent copy. Used in Spring for SecurityContext, transaction management. Remember to remove() to prevent memory leaks."},
+  {q:"A deadlock occurs essentially when?",opts:["A thread runs forever","Two or more threads hold locks the other needs","The JVM runs out of heap","Threads are waiting for IO"],a:1,exp:"Deadlock: Thread A holds lock1, wants lock2. Thread B holds lock2, wants lock1. Both wait forever. Prevention: always acquire locks in same order, use tryLock() with timeout, avoid nested locks."},
+  {q:"The Callable interface differs from Runnable because?",opts:["It runs faster","It does not require a thread","It returns a value and can throw checked exceptions","It has a run() method"],a:2,exp:"Callable<V>: call() returns V and throws Exception. Runnable: run() returns void, no checked exceptions. Use Callable with ExecutorService.submit() which returns Future<V>."},
+  {q:"Best executor for a short-lived async task without limiting thread creation?",opts:["FixedThreadPool","SingleThreadExecutor","ScheduledThreadPool","CachedThreadPool"],a:3,exp:"CachedThreadPool reuses idle threads and creates new ones as needed. Threads die after 60s idle. Good for many short-lived async tasks. FixedThreadPool limits thread count. Consider VirtualThreadPerTaskExecutor in Java 21."},
+  {q:"CompletableFuture provides the ability to?",opts:["Chain and combine async operations non-blocking","Lock objects dynamically","Stop all threads instantly","Inject dependencies"],a:0,exp:"CompletableFuture enables non-blocking async programming: thenApply(), thenCompose(), thenCombine(), exceptionally(). e.g., CompletableFuture.supplyAsync(() -> fetchData()).thenApply(this::process).thenAccept(this::save)"},
+  {q:"Atomic classes (e.g., AtomicInteger) leverage what mechanism internally?",opts:["Heavy synchronized locks","volatile arrays","Compare-And-Swap (CAS) hardware instructions","Database locks"],a:2,exp:"CAS (Compare-And-Swap) is a hardware atomic instruction: 'if current value == expected, set to new value'. AtomicInteger.incrementAndGet() uses CAS in a spin loop — lock-free, high performance."},
+  {q:"A synchronized instance method acquires the lock on?",opts:["The object instance (this)","The Class object","The JVM global lock","The running Thread object"],a:0,exp:"synchronized instance method locks 'this' (the object instance). synchronized static method locks the Class object. Different instances have different locks — two threads can execute synchronized methods on different objects concurrently."},
+  {q:"Thread priority values in Java range from?",opts:["0 to 100","-1 to 1","1 to 10","A to Z"],a:2,exp:"Thread priority: 1 (MIN_PRIORITY) to 10 (MAX_PRIORITY), default 5 (NORM_PRIORITY). However, actual scheduling is OS-dependent and not guaranteed. Don't rely on priority for correctness."},
+  {q:"ReadWriteLock provides which behavioral advantage?",opts:["No locks are ever used","Concurrent reads, but exclusive writes","Concurrent writes, strict reads","Thread safe counting"],a:1,exp:"ReadWriteLock allows multiple concurrent readers OR one exclusive writer. Perfect for read-heavy, write-rare scenarios. ReentrantReadWriteLock is the standard implementation."},
+],
+exceptions: [
+  {q:"Which of the following is incorrect about try-with-resources?",opts:["Introduced in Java 7","We don't need finally if we use it","Ensures each resource is closed at end of statement","It increases the complexity of the code"],a:3,exp:"try-with-resources actually REDUCES complexity by automatically closing resources. Options A, B, C are all correct. D is wrong — it simplifies code and prevents resource leaks."},
+  {q:"What is the output of this code?",code:'try {\n  throw new RuntimeException("Error");\n} catch (Exception e) {\n  System.out.println(e.getMessage());\n}',opts:["Error","RuntimeException","null","The code will not compile"],a:0,exp:"RuntimeException extends Exception, so catch(Exception e) catches it. e.getMessage() returns the message passed to the constructor: \"Error\". Output: Error"},
+  {q:"Which is correct syntax for catching multiple exceptions in a single catch block?",opts:["catch (E1 || E2 ex)","catch (E1, E2 ex)","catch (E1 && E2 ex)","catch (E1 | E2 ex)"],a:3,exp:"Multi-catch syntax uses single pipe |: catch (IOException | SQLException e). The parameter e is implicitly final. Exceptions in multi-catch cannot be related by subclassing."},
+  {q:"What is wrong with this try-with-resources code?",code:"try (FileReader fr = new FileReader(\"\");\n     BufferedReader br = new BufferedReader(fr)) {\n  fr = new FileReader(\"xyz.txt\"); // re-assignment\n  return br.readLine();\n}",opts:["No catch block after try","Re-assignment of variable 'fr' is not allowed","Two resources can't be declared in a try block","The throws clause is not needed"],a:1,exp:"Resources declared in try-with-resources are implicitly final — they cannot be re-assigned. Multiple resources ARE allowed (closed in reverse order). No catch/finally block is required."},
+  {q:"Which exception must be either caught or declared to be thrown?",opts:["NullPointerException","ArrayIndexOutOfBoundsException","FileNotFoundException","ArithmeticException"],a:2,exp:"FileNotFoundException is a checked exception (extends IOException). Checked exceptions must be handled with try-catch or declared with throws. The others are unchecked (extend RuntimeException)."},
+  {q:"What is the output of this code?",code:'try {\n  throw new NullPointerException();\n} catch (RuntimeException e) {\n  System.out.println("RuntimeException");\n} catch (Exception e) {\n  System.out.println("Exception");\n}',opts:["RuntimeException","Exception","NullPointerException","The code will not compile"],a:0,exp:"NullPointerException → RuntimeException → Exception → Throwable. Java matches the first compatible catch. NullPointerException IS-A RuntimeException, so first catch is matched. Output: RuntimeException"},
+  {q:"Which keyword specifies that a method can potentially throw an exception?",opts:["try","catch","throw","throws"],a:3,exp:"throws in method signature declares potential exceptions: public void read() throws IOException. throw (no s) is used inside a method body to actually throw: throw new IllegalArgumentException(). "},
+  {q:"What is the purpose of the finally block?",opts:["Catch and handle exceptions","Specify method can throw exception","Execute code regardless of whether exception is thrown","Explicitly throw an exception"],a:2,exp:"finally always executes (unless JVM crashes or System.exit() is called). Used for cleanup: closing resources, releasing locks. Executes after try AND after any catch block."},
+  {q:"What is the output of this code?",code:'try {\n  int[] array = new int[5];\n  System.out.println(array[5]);\n} catch (ArrayIndexOutOfBoundsException e) {\n  System.out.println("ArrayIndexOutOfBoundsException");\n} finally {\n  System.out.println("Finally block executed.");\n}',opts:["ArrayIndexOutOfBoundsException\nFinally block executed.","ArrayIndexOutOfBoundsException","Finally block executed.","Will not compile"],a:0,exp:"array[5] throws ArrayIndexOutOfBoundsException (valid indices: 0-4). catch prints 'ArrayIndexOutOfBoundsException'. finally ALWAYS runs afterward. Both lines print."},
+  {q:"Which of the following is NOT a subclass of Throwable in Java?",opts:["Checked exception","Unchecked exception","Fatal exception","Error"],a:2,exp:"Throwable hierarchy: Throwable → Exception (checked/unchecked) and Throwable → Error. 'Fatal exception' is not a real Java class. 'Checked' and 'Unchecked' are categories, not classes."},
+  {q:"Which statement is incorrect about Checked Exceptions?",opts:["Called compile-time exceptions","They are subtypes of RuntimeException","Checked at compile-time by compiler","IOException is a type of checked exception"],a:1,exp:"Checked exceptions extend Exception (NOT RuntimeException). RuntimeException and its subclasses are unchecked. IOException, SQLException, ClassNotFoundException are checked. NullPointerException is unchecked."},
+  {q:"In which class is the printStackTrace() method defined?",opts:["Exception","RuntimeException","Throwable","Error"],a:2,exp:"printStackTrace() is defined in Throwable and inherited by all exceptions and errors. It prints the exception type, message, and full stack trace to stderr."},
+  {q:"Which interface must be implemented by a resource for try-with-resources?",opts:["Closeable","AutoCloseable","Resource","Disposable"],a:1,exp:"AutoCloseable (Java 7) requires close() method. Closeable (extends AutoCloseable) declares close() throwing IOException. Any class implementing either can be used in try-with-resources."},
+  {q:"Which method of AutoCloseable is called in try-with-resources?",opts:["clean()","refresh()","close()","release()"],a:2,exp:"try-with-resources automatically calls close() on each resource at the end of the try block. Resources are closed in reverse order of declaration."},
+  {q:"What is the output of this nested try code?",code:'try {\n  throw new Exception("First");\n} catch (Exception e) {\n  try {\n    throw new Exception("Second");\n  } catch (Exception ex) {\n    System.out.println(ex.getMessage());\n  }\n}',opts:["First","Second","First then Second","Second then First"],a:1,exp:"Outer catch catches 'First'. Inside outer catch, new exception 'Second' is thrown and caught by inner catch. inner catch prints ex.getMessage() = \"Second\". Output: Second"},
+  {q:"What is the output of this Throwable catch?",code:'try {\n  throw new Error();\n} catch (Throwable t) {\n  System.out.println(t.getClass().getSimpleName());\n}',opts:["Error","Throwable","Exception","Will not compile"],a:0,exp:"Catching Throwable catches both Exceptions and Errors. t.getClass().getSimpleName() returns the simple class name of the actual object: \"Error\". Not \"Throwable\" (that's the variable type)."},
+],
+spring: [
+  {q:"What is the foundational design principle behind the Spring framework?",opts:["Singleton","Model-View-Controller","Factory Method","Dependency Injection / IoC"],a:3,exp:"Spring's core is IoC (Inversion of Control) — the container creates and manages objects (beans) and injects dependencies. This removes tight coupling and makes code testable."},
+  {q:"What is the default bean scope in Spring?",opts:["Singleton","Prototype","Request","Session"],a:0,exp:"Singleton scope: one bean instance per Spring container. Prototype: new instance each time. Request/Session: web scopes. Use @Scope(\"prototype\") to change from default singleton."},
+  {q:"Which annotation specifically marks a configuration class?",opts:["@Component","@Bean","@Configuration","@EnableAutoConfiguration"],a:2,exp:"@Configuration marks a class as a source of bean definitions. Methods annotated with @Bean define beans. @Component marks general-purpose beans. @Bean can only be used inside @Configuration classes."},
+  {q:"By default, @Autowired resolves dependencies primarily by?",opts:["Name","Type","Qualifier","Method signature"],a:1,exp:"@Autowired first resolves by type. If multiple beans of the same type exist, it tries by name. Use @Qualifier to specify explicitly when multiple candidates exist."},
+  {q:"AOP stands for?",opts:["Abstract Object Protocol","Application Oriented Processing","Aspect-Oriented Programming","Auto Object Provider"],a:2,exp:"AOP (Aspect-Oriented Programming) modularizes cross-cutting concerns like logging, security, and transactions. You define Aspects that are applied at Join Points using Pointcuts."},
+  {q:"What is an 'Aspect' in Spring AOP?",opts:["A database query","A modularization of a cross-cutting concern (like logging)","A Spring Bean Validator","A Controller"],a:1,exp:"Aspect = class annotated with @Aspect containing Advice (what to do) and Pointcut (where to do it). e.g., A LoggingAspect that logs every method call in a service layer."},
+  {q:"A point of execution where an aspect can be plugged in is called?",opts:["Advice","Target Object","Pointcut","Join Point"],a:3,exp:"Join Point: a specific point in execution (method call, exception). Pointcut: expression that selects join points. Advice: code that runs at matched join points (@Before, @After, @Around). Aspect = Pointcut + Advice."},
+  {q:"Advice that executes before and after a join point is known as?",opts:["@Around","@BeforeAfter","@Surround","@Intercept"],a:0,exp:"@Around advice wraps the join point — runs before AND after. It receives a ProceedingJoinPoint and must call proceed() to execute the actual method. Most powerful advice type."},
+  {q:"Spring AOP achieves its functionality by generating?",opts:["Bytecode dynamically","Duplicate classes","JDK Dynamic Proxies or CGLIB proxies","Native OS threads"],a:2,exp:"Spring AOP uses proxies: JDK Dynamic Proxy for interface-based beans, CGLIB proxy for class-based beans. The proxy intercepts method calls and applies advice. This is why you must call via Spring context."},
+  {q:"What is the main difference between @Component and @Service?",opts:["@Service is a semantic specialization of @Component","@Service adds transactions automatically","@Component is faster","There is no difference at all"],a:0,exp:"@Service, @Repository, @Controller are all specializations of @Component. Functionally equivalent for component scanning, but semantically meaningful. @Repository adds exception translation. @Service is for business logic layer."},
+  {q:"ApplicationContext is an advanced sub-interface of?",opts:["ContextLoader","InitializingBean","ApplicationRunner","BeanFactory"],a:3,exp:"BeanFactory is the root IoC container (lazy init). ApplicationContext extends BeanFactory adding AOP, events, i18n, resource loading, and eager initialization. Always prefer ApplicationContext in applications."},
+  {q:"Which annotation is used to run logic immediately after a bean is initialized?",opts:["@AfterConstruct","@PreDestroy","@PostConstruct","@Init"],a:2,exp:"@PostConstruct runs after dependency injection and before the bean is put into service. @PreDestroy runs before the bean is destroyed. Both are standard Java EE/Jakarta annotations."},
+  {q:"What does the @Primary annotation do?",opts:["Makes the bean load first","Resolves ambiguity when multiple beans of same type exist","Assigns maximum memory","Connects to primary database"],a:1,exp:"@Primary marks a bean as preferred when multiple beans of the same type exist. Used with @Qualifier for fine-grained selection when Primary isn't specific enough."},
+  {q:"@Qualifier is typically used alongside?",opts:["@Autowired","@Bean","@Scope","@Configuration"],a:0,exp:"@Autowired @Qualifier(\"specificBean\") tells Spring which specific bean to inject when multiple candidates exist. Name in @Qualifier must match the bean's name."},
+  {q:"'Weaving' in Spring AOP typically occurs at?",opts:["Runtime","Compile time","Class load time","Build time"],a:0,exp:"Spring AOP weaves aspects at runtime using proxies (no bytecode modification). This is simpler but limited to Spring-managed beans and method-level join points. AspectJ supports compile-time and load-time weaving."},
+  {q:"Declarative transaction management (@Transactional) in Spring is implemented using?",opts:["Hibernate","Spring AOP","Servlet Filters","Tomcat Interceptors"],a:1,exp:"@Transactional is powered by Spring AOP — a proxy wraps the method, begins a transaction before, commits or rolls back after. That's why @Transactional doesn't work on private methods (proxy can't intercept them)."},
+],
+springboot: [
+  {q:"@SpringBootApplication comprises which annotations?",opts:["@Controller, @Service, @Repository","@Bean, @Autowired, @Value","@Configuration, @EnableAutoConfiguration, @ComponentScan","@WebMvc, @JPA, @Security"],a:2,exp:"@SpringBootApplication = @Configuration (config class) + @EnableAutoConfiguration (auto-configure beans) + @ComponentScan (scan for components). Placing it on main class bootstraps everything."},
+  {q:"What is the default embedded server in a Spring Boot web application?",opts:["Tomcat","Jetty","Undertow","Netty"],a:0,exp:"Spring Boot includes embedded Tomcat by default in spring-boot-starter-web. Exclude it and add spring-boot-starter-jetty or spring-boot-starter-undertow to switch servers."},
+  {q:"@RestController is a shorthand combination of?",opts:["@Controller and @View","@Controller and @ResponseBody","@Api and @Service","@Component and @JSON"],a:1,exp:"@RestController = @Controller + @ResponseBody. Every method's return value is automatically serialized to JSON/XML and written to the HTTP response body (no View resolution)."},
+  {q:"@PathVariable is used to extract data from?",opts:["Body","Headers","The URI route path","Query string parameters"],a:2,exp:"@PathVariable extracts from URI: @GetMapping(\"/users/{id}\") + @PathVariable Long id. @RequestParam extracts query params: /users?page=1. @RequestBody reads the request body."},
+  {q:"To handle exceptions globally across all controllers, you use?",opts:["@ExceptionHandler","A try-catch in every method","@ErrorController","@ControllerAdvice or @RestControllerAdvice"],a:3,exp:"@RestControllerAdvice + @ExceptionHandler methods catch exceptions from any controller. Much cleaner than try-catch everywhere. Returns ResponseEntity with proper status codes."},
+  {q:"Spring Data JPA typically relies on which interface for automatic CRUD repositories?",opts:["CrudRepository / JpaRepository","EntityManager","SessionFactory","QueryBuilder"],a:0,exp:"JpaRepository extends CrudRepository and PagingAndSortingRepository — provides save(), findById(), findAll(), delete(), count() automatically. No implementation needed — Spring generates it."},
+  {q:"Where are Spring Boot default application properties defined?",opts:["application.properties / application.yml","web.xml","config.ini","settings.json"],a:0,exp:"application.properties or application.yml in src/main/resources. Profile-specific: application-dev.yml, application-prod.yml. Activated via spring.profiles.active=dev."},
+  {q:"What is the purpose of Spring Boot Actuator?",opts:["Automates tests","Compiles code faster","Provides production-ready monitoring and management endpoints","Creates database schemas"],a:2,exp:"Actuator exposes endpoints: /actuator/health, /actuator/metrics, /actuator/info, /actuator/env, /actuator/beans. Essential for production monitoring with Prometheus/Grafana."},
+  {q:"Which HTTP method is traditionally used to replace/update an entire resource?",opts:["PUT","POST","PATCH","UPDATE"],a:0,exp:"PUT replaces the entire resource (idempotent). PATCH partially updates. POST creates a new resource. DELETE removes. GET retrieves. Idempotent: calling multiple times has same effect as calling once."},
+  {q:"Which HTTP method is strictly intended for partial updates to a resource?",opts:["PUT","PATCH","POST","MODIFY"],a:1,exp:"PATCH partially updates a resource — only the fields provided. PUT replaces the entire resource. PATCH is not always idempotent (depends on implementation)."},
+  {q:"@RequestBody binds the incoming HTTP request body to?",opts:["A String map","The HTTP Session","The controller map","A targeted domain/DTO object"],a:3,exp:"@RequestBody deserializes the JSON/XML request body into a Java object using Jackson. e.g., @PostMapping(\"/users\") public User create(@RequestBody UserDTO dto)"},
+  {q:"Returning ResponseEntity allows you to control?",opts:["HTTP status codes, headers, and the body","Thread pools","Server port","Database transactions"],a:0,exp:"ResponseEntity<T> gives full control: return ResponseEntity.status(201).header(\"Location\", uri).body(savedUser). Preferred for REST APIs over just returning the object."},
+  {q:"@Transactional ensures a method executes within a database transaction?",opts:["@JPA","@Transactional","@Commit","@SessionScoped"],a:1,exp:"@Transactional manages transactions declaratively. Default: rolls back on RuntimeException, commits on success. Customize with rollbackFor, propagation, isolation attributes."},
+  {q:"@Value annotation is used for?",opts:["Setting variable defaults","Injecting values from property files into beans","Creating new variables","Counting array sizes"],a:1,exp:"@Value(\"${server.port}\") injects property values. Supports SpEL: @Value(\"#{systemProperties['user.home']}\"). Used on fields, constructor params, and setter params."},
+  {q:"Profile-specific configurations follow which naming convention?",opts:["application-{profile}.yml","{profile}-config.properties","application.yml.{profile}","spring.profile.yml"],a:0,exp:"application-dev.yml, application-prod.yml, application-test.yml. Activate via spring.profiles.active=prod in application.yml or as JVM arg: -Dspring.profiles.active=prod"},
+],
+security: [
+  {q:"What is the core Spring Security interface for loading user-specific data?",opts:["UserLoader","AuthenticationManager","UserDetailsService","CredentialManager"],a:2,exp:"UserDetailsService has loadUserByUsername(String username) returning UserDetails. Implement it to load user from DB. Used by Spring Security's authentication process."},
+  {q:"Authentication verifies?",opts:["Who the user is","What the user can do","Data encryption","Password expiration"],a:0,exp:"Authentication = identity verification (who are you? username/password, JWT, OAuth token). Authorization = permission check (what can you do? roles/permissions). Both are distinct steps."},
+  {q:"JWT stands for?",opts:["JSON Web Token","Java Web Translation","JSON Wrapper Type","Java Wire Transmission"],a:0,exp:"JWT (JSON Web Token) is a compact, self-contained token for transmitting claims between parties. Stateless — server doesn't need to store session. Format: Base64(Header).Base64(Payload).Signature"},
+  {q:"A standard JWT structurally consists of which three parts?",opts:["Head, Body, Tail","Header, Payload, Signature","User, Claims, Hash","Algorithm, Key, Data"],a:1,exp:"JWT: Header (algorithm + type) . Payload (claims: sub, iat, exp, roles) . Signature (HMAC or RSA). Payload is Base64 encoded (NOT encrypted — don't put sensitive data in it)."},
+  {q:"OAuth2 standard is primarily an industry protocol for?",opts:["Password hashing","Database encryption","Delegated Authorization","Network Routing"],a:2,exp:"OAuth2 is for Delegated Authorization — 'Log in with Google' lets an app access your Google data without your Google password. OpenID Connect (OIDC) adds Authentication on top of OAuth2."},
+  {q:"The primary component handling security intercepts in modern Spring Security?",opts:["SecurityInterceptor","DispatcherServlet","ActionChain","SecurityFilterChain"],a:3,exp:"SecurityFilterChain is a chain of servlet filters (Spring Security 5.4+). Each filter handles a concern: CSRF, CORS, authentication, authorization. Replaces WebSecurityConfigurerAdapter (deprecated in 5.7)."},
+  {q:"@PreAuthorize(\"hasRole('ADMIN')\") secures an application at the?",opts:["Database level","Network level","Class level only","Method level"],a:3,exp:"@PreAuthorize enables method-level security. Add @EnableMethodSecurity on config class. @PreAuthorize evaluates SpEL before method execution: @PreAuthorize(\"hasRole('ADMIN') or #userId == authentication.name\")"},
+  {q:"In a microservices architecture, Eureka serves as?",opts:["A database","A Service Discovery / Registry server","A Configuration server","An execution pool"],a:1,exp:"Eureka (Netflix OSS via Spring Cloud) is a Service Registry. Services register on startup (Eureka Client) and discover each other by name instead of hardcoded URLs. Spring Cloud LoadBalancer integrates with it."},
+  {q:"An API Gateway in microservices encapsulates tasks like?",opts:["Writing data to DB","Frontend UI rendering","Caching DB queries","Routing, centralized security, and rate limiting"],a:3,exp:"API Gateway (Spring Cloud Gateway) = single entry point: routes requests to services, handles JWT validation, rate limiting, CORS, request/response transformation. Replaces Zuul (legacy)."},
+  {q:"OpenFeign is utilized primarily for?",opts:["JSON parsing","Managing database entities","Writing declarative REST clients to call other microservices","Logging requests"],a:2,exp:"OpenFeign creates HTTP clients from interfaces: @FeignClient(\"user-service\") interface UserClient { @GetMapping(\"/users/{id}\") User getUser(@PathVariable Long id); } — no boilerplate RestTemplate code."},
+  {q:"Which library typically provides Circuit Breaker patterns in modern Spring Cloud?",opts:["Resilience4j","Hystrix (Legacy)","Log4j","Both A and B"],a:3,exp:"Resilience4j is the modern choice (Hystrix is deprecated). @CircuitBreaker(name=\"myService\", fallbackMethod=\"fallback\") opens circuit after N failures, preventing cascading failures."},
+  {q:"Tools like Zipkin or Jaeger are integrated to achieve?",opts:["Automated Testing","Distributed Tracing across microservices","Memory monitoring","Load balancing"],a:1,exp:"Distributed tracing tracks requests across services using trace IDs and span IDs. Micrometer Tracing + Zipkin in Spring Boot 3.x. Each service propagates trace headers (B3 or W3C TraceContext)."},
+  {q:"Spring Cloud Config is designed to offer?",opts:["Database configurations","Security roles","UI CSS variables","Centralized external config management for distributed systems"],a:3,exp:"Config Server stores configuration in Git/vault/filesystem. Microservices fetch their config on startup: spring.config.import=configserver:http://config-server:8888. Supports @RefreshScope for dynamic updates."},
+  {q:"Cross-Origin Resource Sharing (CORS) manages?",opts:["Load balancers","Cross-site scripting","Browser security constraints for cross-domain requests","SQL Injections"],a:2,exp:"CORS is a browser security feature preventing requests from domain A to domain B unless B explicitly allows it. In Spring: @CrossOrigin or configure in SecurityFilterChain: .cors(cors -> cors.configurationSource(...))"},
+],
+junit: [
+  {q:"Which annotation marks a method as a test case in JUnit 5?",opts:["@Test","@TestCase","@TestMethod","@Run"],a:0,exp:"@Test from org.junit.jupiter.api marks test methods in JUnit 5. Different package from JUnit 4's @Test (org.junit.Test). No need to throw any exception — JUnit 5 @Test methods can throw checked exceptions."},
+  {q:"JUnit 5 is primarily composed of which three sub-projects?",opts:["Core, Jupiter, Runner","Platform, Jupiter, Vintage","Base, API, Engine","Engine, Vintage, Surefire"],a:1,exp:"Platform: foundation, launches tests. Jupiter: new JUnit 5 API and engine. Vintage: supports running JUnit 3/4 tests on JUnit 5 Platform. Most code uses Jupiter API."},
+  {q:"Which JUnit 5 annotation replaces JUnit 4's @Before?",opts:["@BeforeAll","@BeforeEach","@Setup","@Init"],a:1,exp:"JUnit 5: @BeforeEach (was @Before), @AfterEach (was @After), @BeforeAll (was @BeforeClass), @AfterAll (was @AfterClass), @Disabled (was @Ignore)."},
+  {q:"How do you temporarily disable a test in JUnit 5?",opts:["@Ignore","@Disabled","@Skip","@NotTest"],a:1,exp:"@Disabled(\"reason\") skips the test without compilation error. JUnit 4's @Ignore is not available in JUnit 5. Disabled tests are reported separately in the test summary."},
+  {q:"In JUnit 5, how do you verify that a specific exception is thrown?",opts:["@Test(expected = Exception.class)","Using assertThrows() method","Using Assertions.exception()","Using assertError()"],a:1,exp:"assertThrows(ExceptionClass.class, () -> methodThatThrows()). Returns the exception for further assertions. JUnit 4 used @Test(expected=...) which couldn't inspect the exception."},
+  {q:"Which annotation ensures a method runs once before all tests in the class?",opts:["@BeforeAll","@BeforeEach","@Init","@BeforeClass"],a:0,exp:"@BeforeAll runs once before all tests in the class (must be static by default). @BeforeEach runs before each individual test. @TestInstance(Lifecycle.PER_CLASS) allows non-static @BeforeAll."},
+  {q:"By default, @BeforeAll annotated method must have which modifier?",opts:["private","interface","static","abstract"],a:2,exp:"@BeforeAll methods must be static by default (since JUnit creates a new test instance per test method). Exception: @TestInstance(Lifecycle.PER_CLASS) allows non-static @BeforeAll."},
+  {q:"Which annotation gives a human-readable name to a test in reports?",opts:["@Name","@Title","@DisplayName","@TestName"],a:2,exp:"@DisplayName(\"Should calculate sum correctly\") gives a descriptive name shown in IDE and CI reports instead of the method name. Supports Unicode and special characters."},
+  {q:"Which assertion method groups multiple assertions so all failures are reported together?",opts:["assertAll()","assertMultiple()","assertGroup()","assertTogether()"],a:0,exp:"assertAll(() -> assertEquals(1, x), () -> assertTrue(y > 0), ...) — runs all assertions even if some fail. Reports all failures at once instead of stopping at first failure."},
+  {q:"What annotation executes a test with different arguments?",opts:["@RepeatedTest","@ParameterizedTest","@DataTest","@ValueTest"],a:1,exp:"@ParameterizedTest + @ValueSource, @CsvSource, @MethodSource, etc. runs the test multiple times with different inputs. e.g., @ParameterizedTest @ValueSource(ints = {1,2,3}) void test(int num)"},
+  {q:"What does assertSame() explicitly check?",opts:["Deep value equality using equals()","Exact object memory reference equality (==)","HashCode similarity","Object type equality"],a:1,exp:"assertSame(expected, actual) checks == (same object reference). assertEquals() calls equals() (value equality). Two new Integer(5) objects would pass assertEquals but fail assertSame."},
+  {q:"What replaces JUnit 4's @RunWith and Rules in JUnit 5?",opts:["Runners","Extensions (@ExtendWith)","Rules Engine","Decorators"],a:1,exp:"@ExtendWith(MockitoExtension.class), @ExtendWith(SpringExtension.class) replace @RunWith. Extensions can implement BeforeEachCallback, AfterEachCallback, ParameterResolver, etc."},
+  {q:"Which annotation is a valid data source for @ParameterizedTest?",opts:["@ValueSource","@CsvSource","@MethodSource","All of the above"],a:3,exp:"All three work: @ValueSource(strings={\"a\",\"b\"}), @CsvSource({\"1,one\",\"2,two\"}), @MethodSource(\"myMethod\") where method returns Stream/List. @EnumSource and @ArgumentsSource also work."},
+  {q:"What does @RepeatedTest annotation do?",opts:["Retries if test fails","Runs test unconditionally N times","Runs in parallel","Re-runs historical failed tests"],a:1,exp:"@RepeatedTest(5) runs the test exactly 5 times. Access RepetitionInfo parameter for current repetition count. Different from @RetryTest (which retries on failure — a third-party extension)."},
+],
+mockito: [
+  {q:"What is the primary purpose of the Mockito framework?",opts:["Stress/Load testing servers","Mocking external dependencies and verifying interactions","Running tests in CI/CD","Migrating databases automatically"],a:1,exp:"Mockito creates mock objects to isolate the unit under test from its dependencies. You can stub method behavior and verify interactions without needing real implementations."},
+  {q:"Which static method defines the expected behavior (stubbing) of a mocked method?",opts:["given()","expect()","when()","set()"],a:2,exp:"when(mock.method(arg)).thenReturn(value) — the core stubbing syntax. Also: thenThrow(), thenAnswer(), thenCallRealMethod(). BDDMockito: given(mock.method()).willReturn(value)."},
+  {q:"How do you verify a specific method was called exactly once?",opts:["verify(mock).method()","assertCalled(mock).method()","check(mock).method()","mock.isCalled()"],a:0,exp:"verify(mock).method() — verifies exactly once. verify(mock, times(3)).method() — exactly 3 times. verify(mock, never()).method() — never called. verify(mock, atLeast(2)).method() — at least twice."},
+  {q:"Which annotation automatically injects mock fields into the tested object?",opts:["@InjectMocks","@Mock","@Spy","@Autowired"],a:0,exp:"@InjectMocks creates the class under test and injects @Mock/@Spy fields. @Mock creates a mock. @Spy wraps a real object. Used with @ExtendWith(MockitoExtension.class)."},
+  {q:"What is the core difference between @Mock and @Spy?",opts:["A Mock is real, a Spy is fake","A Spy wraps a real object maintaining real behavior until stubbed; Mock is completely fake","No difference","A Spy executes faster"],a:1,exp:"@Mock: all methods return defaults (null/0/false). @Spy: calls real methods unless stubbed. Use Spy when you want most real behavior but stub specific methods. Use Mock for complete isolation."},
+  {q:"How do you mock a void method to throw an exception?",opts:["when(mock.method()).thenThrow(Exception.class)","doThrow(Exception.class).when(mock).method()","throw(Exception.class).when().method()","assertThrows(...)"],a:1,exp:"Void methods can't use when().thenThrow(). Use: doThrow(new RuntimeException()).when(mock).voidMethod(). Similarly: doNothing(), doAnswer(), doReturn() work with void methods."},
+  {q:"What class captures arguments passed to a mocked method?",opts:["ArgumentCaptor","ArgumentMatcher","ValueCaptor","ParameterGrabber"],a:0,exp:"ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class); verify(mock).method(captor.capture()); String arg = captor.getValue(); — inspect what was actually passed."},
+  {q:"What does anyInt() do when used in a Mockito when() clause?",opts:["Mocks the Integer class","Acts as argument matcher allowing any int value","Returns a random int","Throws exception if not matched"],a:1,exp:"anyInt() (and any(), anyString(), anyList(), etc.) are argument matchers. when(mock.method(anyInt())).thenReturn(x) — stub for any int argument. If any arg uses matchers, ALL args must use matchers."},
+  {q:"By default, what does an un-stubbed method return on a mock?",opts:["null","Throws NullPointerException","Returns new Object()","Returns the mock itself"],a:0,exp:"Un-stubbed methods return: null (objects), 0 (numbers), false (boolean), empty collections. This is 'nice mock' behavior. Use RETURNS_SMART_NULLS to get better error messages on NPEs."},
+  {q:"How do you initialize Mockito annotations programmatically?",opts:["Mockito.start()","MockitoAnnotations.openMocks(this)","Mockito.init()","Annotations.load()"],a:1,exp:"MockitoAnnotations.openMocks(this) in @BeforeEach initializes @Mock, @Spy, @InjectMocks. Or use @ExtendWith(MockitoExtension.class) on the class (cleaner). Or @RunWith(MockitoJUnitRunner.class) in JUnit 4."},
+  {q:"What happens if verifyNoMoreInteractions(mock) is called and there's an unverified interaction?",opts:["Clears mock memory","Ends the test early","Fails the test","Globally disables the mock"],a:2,exp:"verifyNoMoreInteractions(mock) fails the test if any interaction on the mock was NOT verified. Useful to ensure no unexpected calls were made. Use sparingly — can make tests brittle."},
+  {q:"BDDMockito introduces which alternative stubbing syntax?",opts:["expect() / toReturn()","given() / willReturn()","setup() / verify()","mock() / behavior()"],a:1,exp:"BDD style: given(mock.method()).willReturn(value) instead of when().thenReturn(). Reads like: given [precondition], when [action], then [assertion]. More readable in BDD/Gherkin-style tests."},
+  {q:"Can modern Mockito (3.4.0+) natively mock static methods?",opts:["Yes, using mockStatic()","No, requires PowerMock","Yes, with @MockStatic annotation","Only in Spring Boot"],a:0,exp:"try (MockedStatic<MyClass> mocked = mockStatic(MyClass.class)) { mocked.when(MyClass::staticMethod).thenReturn(value); } — try-with-resources ensures cleanup. No PowerMock needed!"},
+  {q:"What class is used to verify the chronological order of mock interactions?",opts:["verifyOrder()","OrderVerifier","InOrder","SequentialVerify"],a:2,exp:"InOrder inOrder = inOrder(mock1, mock2); inOrder.verify(mock1).methodA(); inOrder.verify(mock2).methodB(); — verifies methodA was called before methodB."},
+],
+sbtest: [
+  {q:"Which annotation bootstraps the entire Spring Application Context for Integration Testing?",opts:["@WebMvcTest","@SpringBootTest","@DataJpaTest","@SpringTest"],a:1,exp:"@SpringBootTest loads the complete application context. Use for integration tests. Slow (loads all beans). Combine with @AutoConfigureMockMvc for web layer testing within full context."},
+  {q:"Which annotation tests purely the web layer by skipping services/repositories?",opts:["@WebMvcTest","@SpringBootTest","@JsonTest","@RestControllerTest"],a:0,exp:"@WebMvcTest(UserController.class) only loads the web layer (controllers, filters, @ControllerAdvice). Services, repos are not loaded — mock them with @MockBean. Fast and focused."},
+  {q:"How do you replace an existing bean with a mock in Spring Application Context?",opts:["@Mock","@Spy","@MockBean","@FakeBean"],a:2,exp:"@MockBean adds/replaces a bean in the ApplicationContext with a Mockito mock. Use in @SpringBootTest or @WebMvcTest. @Mock (plain Mockito) doesn't interact with Spring context."},
+  {q:"Which annotation focuses on testing JPA repositories independently?",opts:["@DbTest","@DataJpaTest","@RepositoryTest","@JpaTest"],a:1,exp:"@DataJpaTest configures only JPA components (entities, repositories). Disables full auto-configuration. By default uses in-memory H2. Add @AutoConfigureTestDatabase(replace=NONE) to use real DB."},
+  {q:"By default, @DataJpaTest executes against what kind of database?",opts:["Full production DB","Auto-configured In-memory DB (e.g., H2)","Docker container DB","No database"],a:1,exp:"@DataJpaTest replaces the configured DataSource with an embedded in-memory database (H2) by default for fast, isolated tests. Each test runs in a transaction that is rolled back."},
+  {q:"What object allows making HTTP requests to Spring Controllers without a Tomcat server?",opts:["RestTemplate","MockMvc","TestRestTemplate","WebClient"],a:1,exp:"MockMvc performs HTTP requests in-process without starting a server. mockMvc.perform(get(\"/users/1\")).andExpect(status().isOk()).andExpect(jsonPath(\"$.name\").value(\"Rahul\"))"},
+  {q:"What does @TestPropertySource do?",opts:["Scans system for unknown properties","Overrides application properties for a given test class","Deletes properties","Generates random mock properties"],a:1,exp:"@TestPropertySource(properties={\"server.port=8081\"}) or @TestPropertySource(locations=\"classpath:test.properties\") overrides properties for the annotated test class."},
+  {q:"Which annotation is explicitly meant for testing REST clients without network?",opts:["@RestClientTest","@WebMvcTest","@WebFluxTest","@HttpTest"],a:0,exp:"@RestClientTest configures RestTemplate/RestClient and MockRestServiceServer for testing REST client code. You can mock HTTP responses without a real server."},
+  {q:"With @SpringBootTest(webEnvironment=RANDOM_PORT), which HTTP client is provided?",opts:["TestRestTemplate","MockMvc","WebClient","MockHttpClient"],a:0,exp:"TestRestTemplate is auto-configured with @SpringBootTest(RANDOM_PORT). It points to the test server. Uses @LocalServerPort to get the actual port. For reactive apps, use WebTestClient."},
+  {q:"How is database state rolled back after @DataJpaTest methods?",opts:["@Rollback and @Transactional defaults rollback post-test","Manual SQL teardowns","Data is permanently saved","Testcontainers resets"],a:0,exp:"@DataJpaTest wraps each test in a transaction that rolls back after the test. This means each test starts with a clean database state without manual cleanup."},
+  {q:"Which annotation verifies JSON serialization/deserialization?",opts:["@JsonTest","@SerializeTest","@JacksonTest","@MappingTest"],a:0,exp:"@JsonTest configures only Jackson (or Gson/JsonB). Injects JacksonTester<T> or ObjectMapper. Use to verify your @JsonProperty, @JsonIgnore, custom serializers work correctly."},
+  {q:"What does @DynamicPropertySource do?",opts:["Adds dynamic properties to Environment (used with Testcontainers)","Mocks properties","Sets value dynamically","Injects property"],a:0,exp:"@DynamicPropertySource allows setting properties programmatically at test startup. Perfect for Testcontainers: @DynamicPropertySource static void props(DynamicPropertyRegistry r) { r.add(\"spring.datasource.url\", container::getJdbcUrl); }"},
+  {q:"What role does Testcontainers play in Spring Boot Testing?",opts:["Generates mock UI","Spins up real Docker containers (DB, Redis) for integration tests","Packages FAT jars","Deploys to AWS"],a:1,exp:"Testcontainers manages real Docker containers during tests — @Container static PostgreSQLContainer db = new PostgreSQLContainer(\"postgres:15\"). Gives you real DB behavior without mocking SQL."},
+  {q:"The TDD cycle dictates which continuous process?",opts:["Green-Red-Refactor","Refactor-Red-Green","Red-Green-Refactor","Write Code-Write Test-Deploy"],a:2,exp:"Red: Write a failing test first. Green: Write minimal code to make it pass. Refactor: Clean up code while keeping tests green. This cycle ensures test coverage and drives clean design."},
+  {q:"BDD enforces test implementations using what readable terminology?",opts:["Arrange, Act, Assert","Given, When, Then","Try, Catch, Finally","Setup, Execute, Verify"],a:1,exp:"BDD (Given-When-Then): Given [initial context/state], When [action/event], Then [expected outcome]. Maps to unit test structure: Given = setup, When = execute, Then = assert/verify."},
+],
+};
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+const STORAGE_KEY = 'cg_l1_v3';
+let state = loadState();
+let session = { qList:[], idx:0, modId:null, answered:false, sessionCorrect:0, sessionWrong:0, sessionSkipped:0 };
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e){}
+  return { total:0, correct:0, streak:0, bestStreak:0, moduleStats:{} };
+}
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e){}
+}
+function resetProgress() {
+  if (!confirm('Reset all progress? This cannot be undone.')) return;
+  state = { total:0, correct:0, streak:0, bestStreak:0, moduleStats:{} };
+  saveState(); renderHome();
+}
+
+// ─── HOME ────────────────────────────────────────────────────────────────────
+function renderHome() {
+  show('home'); hide('quiz'); hide('results');
+  const pct = state.total > 0 ? Math.round(state.correct/state.total*100) + '%' : '—';
+  setText('s-total', state.total);
+  setText('s-correct', state.correct);
+  setText('s-pct', pct);
+  setText('s-streak', state.streak);
+  const now = new Date();
+  const l1 = new Date(2026, 3, 27);
+  const days = Math.ceil((l1 - now) / 86400000);
+  setText('days-left', days > 0 ? days + ' days to L1' : 'L1 is today!');
+  buildModuleGrid();
+}
+
+function buildModuleGrid() {
+  const grid = document.getElementById('module-grid');
+  grid.innerHTML = '';
+  MODULES.forEach(m => {
+    const ms = state.moduleStats[m.id] || {};
+    const total = ms.total || 0;
+    const correct = ms.correct || 0;
+    const qs = ALL_QUESTIONS[m.id] || [];
+    const pct = total > 0 ? Math.round(correct/total*100) : 0;
+    const done = total >= qs.length && total > 0;
+    const div = document.createElement('div');
+    div.className = 'mod-card';
+    div.innerHTML = `
+      <div class="mod-icon">${m.icon}</div>
+      <div class="mod-name">${m.name}</div>
+      <div class="mod-count">${qs.length} questions</div>
+      ${total > 0 ? `<div class="mod-progress"><div class="mod-bar" style="width:${pct}%"></div></div><div class="mod-score">${correct}/${total} · ${pct}%</div>` : '<div style="height:8px"></div>'}
+      ${done ? '<div class="mod-done-badge">✓</div>' : ''}
+    `;
+    div.onclick = () => startModule(m.id);
+    grid.appendChild(div);
+  });
+}
+
+// Redundant daysLeft function removed.
+
+// ─── QUIZ ────────────────────────────────────────────────────────────────────
+function shuffle(arr) {
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+function startModule(modId) {
+  const qs = ALL_QUESTIONS[modId];
+  if (!qs || !qs.length) { alert('No questions for this module yet.'); return; }
+  session = { qList: shuffle(qs.map(q=>({...q,_mod:modId}))), idx:0, modId, answered:false, sessionCorrect:0, sessionWrong:0, sessionSkipped:0 };
+  show('quiz'); hide('home'); hide('results');
+  const mod = MODULES.find(m=>m.id===modId);
+  const tag = document.getElementById('q-module-tag');
+  tag.textContent = mod ? mod.label : modId;
+  tag.className = 'quiz-module-tag ' + (mod ? mod.tag : '');
+  renderQ();
+}
+
+function startMixed() {
+  let all = [];
+  MODULES.forEach(m => { (ALL_QUESTIONS[m.id]||[]).forEach(q => all.push({...q,_mod:m.id})); });
+  session = { qList: shuffle(all), idx:0, modId:'mixed', answered:false, sessionCorrect:0, sessionWrong:0, sessionSkipped:0 };
+  show('quiz'); hide('home'); hide('results');
+  const tag = document.getElementById('q-module-tag');
+  tag.textContent = 'All modules (mixed)'; tag.className = 'quiz-module-tag tag-blue';
+  renderQ();
+}
+
+function startWeak() {
+  let weak = [];
+  MODULES.forEach(m => {
+    const ms = state.moduleStats[m.id]||{};
+    const pct = ms.total > 0 ? ms.correct/ms.total : 0;
+    if (pct < 0.7) { (ALL_QUESTIONS[m.id]||[]).forEach(q => weak.push({...q,_mod:m.id})); }
+  });
+  if (!weak.length) { alert('No weak areas yet! Practice some modules first.'); return; }
+  session = { qList: shuffle(weak), idx:0, modId:'weak', answered:false, sessionCorrect:0, sessionWrong:0, sessionSkipped:0 };
+  show('quiz'); hide('home'); hide('results');
+  const tag = document.getElementById('q-module-tag');
+  tag.textContent = 'Weak areas'; tag.className = 'quiz-module-tag tag-exceptions';
+  renderQ();
+}
+
+function renderQ() {
+  const q = session.qList[session.idx];
+  if (!q) { showResults(); return; }
+  session.answered = false;
+  const total = session.qList.length;
+  const idx = session.idx;
+  setText('q-progress-text', `${idx+1} / ${total}`);
+  document.getElementById('q-progress-bar').style.width = `${(idx/total)*100}%`;
+  setText('q-num', `Question ${idx+1} of ${total}`);
+  setText('q-text', q.q);
+  const code = document.getElementById('q-code');
+  if (q.code) { code.textContent = q.code; show(code); } else { hide(code); }
+  const opts = document.getElementById('q-opts');
+  opts.innerHTML = '';
+  const keys = ['A','B','C','D'];
+  q.opts.forEach((opt, i) => {
+    const d = document.createElement('div');
+    d.className = 'opt';
+    d.innerHTML = `<div class="opt-key">${keys[i]}</div><div class="opt-text">${opt}</div>`;
+    d.onclick = () => selectOpt(i, d);
+    opts.appendChild(d);
+  });
+  hide('q-feedback');
+  show('btn-skip'); hide('btn-next');
+}
+
+function selectOpt(idx, el) {
+  if (session.answered) return;
+  session.answered = true;
+  const q = session.qList[session.idx];
+  const opts = document.querySelectorAll('#q-opts .opt');
+  opts.forEach(o => o.classList.add('disabled'));
+  const correct = idx === q.a;
+  el.classList.add(correct ? 'correct' : 'wrong');
+  if (!correct) opts[q.a].classList.add('show-correct');
+  const fb = document.getElementById('q-feedback');
+  fb.className = 'feedback ' + (correct ? 'feedback-correct' : 'feedback-wrong');
+  fb.innerHTML = `<strong>${correct ? '✓ Correct!' : '✗ Incorrect — Correct answer: ' + ['A','B','C','D'][q.a]}</strong>${q.exp}`;
+  show(fb);
+  hide('btn-skip'); show('btn-next');
+  // update stats
+  state.total++;
+  if (correct) { state.correct++; state.streak++; session.sessionCorrect++; }
+  else { state.streak = 0; session.sessionWrong++; }
+  state.bestStreak = Math.max(state.bestStreak, state.streak);
+  const modId = q._mod || session.modId;
+  if (!state.moduleStats[modId]) state.moduleStats[modId] = { total:0, correct:0 };
+  state.moduleStats[modId].total++;
+  if (correct) state.moduleStats[modId].correct++;
+  saveState();
+  setText('s-total', state.total);
+  setText('s-correct', state.correct);
+  const pct = Math.round(state.correct/state.total*100);
+  setText('s-pct', pct + '%');
+  setText('s-streak', state.streak);
+}
+
+function nextQ() {
+  if (!session.answered) { session.sessionSkipped++; }
+  session.idx++;
+  if (session.idx >= session.qList.length) { showResults(); return; }
+  session.answered = false;
+  renderQ();
+}
+
+function showResults() {
+  show('results'); hide('quiz'); hide('home');
+  const { sessionCorrect: c, sessionWrong: w, sessionSkipped: s, qList } = session;
+  const total = c + w + s;
+  const pct = total > 0 ? Math.round(c/total*100) : 0;
+  const el = document.getElementById('res-pct');
+  el.textContent = pct + '%';
+  el.style.color = pct >= 80 ? 'var(--green)' : pct >= 60 ? 'var(--amber)' : 'var(--red)';
+  const labels = ['Needs work — keep practicing! 💪', 'Passed the minimum (60%) — push for 80%+ 📈', 'Great job! You\'re ready for L1! 🎉'];
+  const li = pct >= 80 ? 2 : pct >= 60 ? 1 : 0;
+  setText('res-label', labels[li]);
+  setText('res-correct', c); setText('res-wrong', w); setText('res-skipped', s);
+}
+
+function retryModule() {
+  if (session.modId === 'mixed') startMixed();
+  else if (session.modId === 'weak') startWeak();
+  else startModule(session.modId);
+}
+
+function goHome() { renderHome(); }
+
+// ─── UTILS ───────────────────────────────────────────────────────────────────
+function show(el) { const e = typeof el==='string'?document.getElementById(el):el; if(e) e.classList.remove('hidden'); }
+function hide(el) { const e = typeof el==='string'?document.getElementById(el):el; if(e) e.classList.add('hidden'); }
+function setText(id, val) { const e=document.getElementById(id); if(e) e.textContent=val; }
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+renderHome();
+</script>
+</body>
+</html>
